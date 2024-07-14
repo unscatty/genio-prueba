@@ -3,9 +3,9 @@ import NavBar from "@/components/common/NavBar";
 import { classNames } from "@/utils/common";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { GoogleTagManager } from '@next/third-parties/google'
 import Script from "next/script";
+import Footer from "@/components/common/Footer";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,6 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <Main>
           {children}
         </Main>
+        <Footer />
       </body>
     </html>
   );
