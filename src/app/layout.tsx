@@ -20,10 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <head>
-        <GoogleTagManager gtmId="GTM-TPBJXFSP" /> // Analytics
-      </head>
-      
+      <GoogleTagManager gtmId="GTM-TPBJXFSP" /> // Analytics
       <body className={classNames(inter.className, 'bg-white')}>
         <header>
           <NavBar />
