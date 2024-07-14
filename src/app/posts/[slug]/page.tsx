@@ -3,6 +3,7 @@ import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 import Image from "next/image";
 import Article from "@/components/common/Article";
+import BackButton from "@/components/posts/BackButton";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const post = (await apiClient.post().find(new URLSearchParams(params)))[0]!
@@ -18,8 +19,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const tagNames = ((await apiClient.postTag().find(undefined, ...(post.tags ?? []))).filter(tag => !!tag).map(tag => tag.name))
 
   return (
-    <section className="py-8 md:py-12 fade-in">
+    <section className="fade-in">
       <div className="mx-auto max-w-5xl p-6 sm:p-8">
+        <div className="flex w-full justify-center md:block py-2">
+          <BackButton />
+        </div>
         <h1>
           <Balancer>
             <span
