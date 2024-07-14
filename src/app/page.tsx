@@ -8,19 +8,33 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const { author, tag, category, page = '1', per_page = '9', order = 'desc' } = searchParams;
+  const { user, tags, categories, page = '1', per_page = '9', order = 'desc' } = searchParams;
 
   const pageParam = parseInt(page, 10);
   const perPageParam = parseInt(per_page, 10);
 
-  const posts = (await apiClient.post().find(new URLSearchParams({
+  const queryParams = new URLSearchParams({
     page: pageParam.toString(),
     per_page: perPageParam.toString(),
     order,
-  }))).filter(post => !!post)
+  });
 
-  const previousHref = pageParam > 1 ? '/?' + new URLSearchParams({ ...searchParams, page: (pageParam - 1).toString() }).toString() : '/';
-  const nextHref = pageParam < posts.length ? '/?' + new URLSearchParams({ ...searchParams, page: (pageParam + 1).toString() }).toString() : '/';
+  if (user) {
+    queryParams.append('user', user);
+  }
+
+  if (tags) {
+    queryParams.append('tags', tags);
+  }
+
+  if (categories) {
+    queryParams.append('categories', categories);
+  }
+
+  const posts = (await apiClient.post().find(queryParams)).filter(post => !!post)
+
+  const previousHref = pageParam > 1 ? '/?' + new URLSearchParams({ ...queryParams, page: (pageParam - 1).toString() }).toString() : '/';
+  const nextHref = pageParam < posts.length ? '/?' + new URLSearchParams({ ...queryParams, page: (pageParam + 1).toString() }).toString() : '/';
 
   return (
     <div className="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
@@ -41,7 +55,7 @@ export default async function Home({
         />
         <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
           {posts.map((post) => (
-            <Link key={post.id} href={`/posts/${post.slug}`} className="flex flex-col rounded-lg shadow-lg overflow-hidden not-prose">
+            <Link key={post.id} href={`/${post.slug}`} className="flex flex-col rounded-lg shadow-lg overflow-hidden not-prose">
               <PostCard post={post} />
             </Link>
           ))}

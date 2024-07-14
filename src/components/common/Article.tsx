@@ -18,7 +18,7 @@ export default function Article({
       dangerouslySetInnerHTML={dangerouslySetInnerHTML}
       className={classNames(
         // General Prose
-        "prose prose-neutral prose:font-sans dark:prose-invert xl:prose-lg",
+        "prose prose-neutral prose:font-sans dark:prose-invert",
         // Prose Headings
         "prose-headings:font-normal",
         // Prose Paragraphs

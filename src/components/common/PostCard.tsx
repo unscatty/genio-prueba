@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { WPPost } from "wordpress-api-client";
 import { apiClient } from "@/lib/api-client";
+import { classNames } from "@/utils/common";
 
 export default async function PostCard({ post }: { post: WPPost }) {
   const image = (await apiClient.media().find(undefined, ...(post.featured_media ? [post.featured_media] : [])))[0]!
@@ -14,7 +15,7 @@ export default async function PostCard({ post }: { post: WPPost }) {
     year: "numeric",
   });
 
-  const tagNames = ((await apiClient.postTag().find(undefined, ...(post.tags ?? []))).filter(tag => !!tag).map(tag => tag.name))
+  const tags = ((await apiClient.postTag().find(undefined, ...(post.tags ?? []))).filter(tag => !!tag))
 
   const category = (await apiClient.postCategory().find(undefined, ...(post.categories ?? [])))[0]!
 
@@ -47,26 +48,32 @@ export default async function PostCard({ post }: { post: WPPost }) {
         </div>
         <div className="flex flex-wrap gap-1 my-4">
           {
-            tagNames.map(tagName => (
-              <span
-                key={tagName}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pomegranate-100 text-pomegranate-800"
+            tags.map(tag => (
+              <Link
+                href={`/?tags=${tag.id}`}
+                key={tag.id}
+                className={
+                  classNames(
+                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pomegranate-100 text-pomegranate-800',
+                    'hover:bg-transparent hover:ring-1 hover:ring-pomegranate hover:text-pomegranate'
+                  )
+                }
               >
-                {tagName}
-              </span>
+                {tag.name}
+              </Link>
             ))
           }
         </div>
         <div className="flex items-center">
           <div className="flex-shrink-0">
-            <Link href={author.link}>
+            <Link href={`/?user=${author.id}`}>
               <span className="sr-only">{author.name}</span>
               <img className="h-10 w-10 rounded-full" src={author.avatar_urls?.[48]} alt="" />
             </Link>
           </div>
           <div className="ml-3">
             <p className="text-sm font-medium text-gray-900">
-              <Link href={author.link} className="not-prose hover:underline">
+              <Link href={`/?user=${author.id}`} className="not-prose hover:underline">
                 {author.name}
               </Link>
             </p>

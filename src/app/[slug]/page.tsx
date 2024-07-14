@@ -4,6 +4,8 @@ import Balancer from "react-wrap-balancer";
 import Image from "next/image";
 import Article from "@/components/common/Article";
 import BackButton from "@/components/posts/BackButton";
+import RandomPosts from "@/components/posts/RandomPosts";
+import { classNames } from "@/utils/common";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const post = (await apiClient.post().find(new URLSearchParams(params)))[0]!
@@ -16,7 +18,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   });
   const category = (await apiClient.postCategory().find(undefined, post.categories![0]!))[0]!
 
-  const tagNames = ((await apiClient.postTag().find(undefined, ...(post.tags ?? []))).filter(tag => !!tag).map(tag => tag.name))
+  const tags = ((await apiClient.postTag().find(undefined, ...(post.tags ?? []))).filter(tag => !!tag))
 
   return (
     <section className="fade-in">
@@ -38,27 +40,33 @@ export default async function Page({ params }: { params: { slug: string } }) {
             Publicado el {date} por{" "}
             {author?.name! && (
               <span>
-                <a href={`/posts/?author=${author.id}`}>{author.name}</a>{" "}
+                <Link href={`/?user=${author.id}`}>{author.name}</Link>{" "}
               </span>
             )}
           </h5>
           <Link
-            href={`/posts/?category=${category.id}`}
+            href={`/?categories=${category.id}`}
             className="hover:underline not-prose text-sm font-medium text-pomegranate-600"
           >
             {category.name}
           </Link>
         </div>
         {/* <div className="flex justify-between items-center gap-4 text-sm mb-4"> */}
-        <div className="flex flex-row-reverse flex-wrap gap-1 my-2">
+        <div className="flex flex-row-reverse flex-wrap space-x-1 my-2">
           {
-            tagNames.map(tagName => (
-              <span
-                key={tagName}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ring-2 ring-pomegranate-500 text-pomegranate-800"
+            tags.map(tag => (
+              <Link
+                href={`/?tags=${tag.id}`}
+                key={tag.id}
+                className={
+                  classNames(
+                    'not-prose inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pomegranate-100 text-pomegranate-800',
+                    'hover:bg-transparent hover:ring-1 hover:ring-pomegranate hover:text-pomegranate'
+                  )
+                }
               >
-                {tagName}
-              </span>
+                {tag.name}
+              </Link>
             ))
           }
         </div>
@@ -74,6 +82,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
           />
         </div>
         <Article className="max-w-full text-justify" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+        
+        <h2>Te podría interesar</h2>
+        <RandomPosts />
       </div>
     </section>
   );
