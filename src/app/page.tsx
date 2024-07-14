@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api-client";
 import Link from "next/link";
 import PostCard from "@/components/common/PostCard";
 import Pagination from "@/components/common/Pagination";
+import PostFilters from "@/components/filters/PostFilters";
 
 export default async function Home({
   searchParams,
@@ -46,6 +47,8 @@ export default async function Home({
 
             Incididunt culpa nulla sunt magna officia exercitation amet. Reprehenderit aute nulla cillum sunt Lorem pariatur nulla labore duis nulla do laboris officia. Non ex aute tempor ea minim labore dolore incididunt id ea. Nostrud sit nulla tempor tempor ad officia. Deserunt tempor voluptate do voluptate culpa anim et reprehenderit deserunt veniam sit. Exercitation est in consequat et Lorem pariatur do voluptate.
           </p>
+
+          <PostFilters />
         </div>
         <Pagination
           className="not-prose"
