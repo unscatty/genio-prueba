@@ -4,6 +4,7 @@ import { classNames } from "@/utils/common";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <GoogleTagManager gtmId="GTM-TPBJXFSP" /> // Analytics
+      </head>
+      
       <body className={classNames(inter.className, 'bg-white')}>
         <header>
           <NavBar />
