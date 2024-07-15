@@ -26,6 +26,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - name: Create env file
+        run: |
+          echo "${{ secrets.PRODUCTION_ENV }}" > .env.local
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
